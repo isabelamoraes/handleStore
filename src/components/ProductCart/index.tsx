@@ -24,21 +24,27 @@ export interface ProductCartProps {
     quantity: number;
 }
 
-export function ProductCart() {
+interface CartProps {
+    product: ProductCartProps;
+}
+
+export function ProductCart({
+    product
+}: CartProps) {
     const theme = useTheme();
 
     return (
         <Container>
             <Image
-                source={{ uri: "http://lorempixel.com/640/480/food", }}
+                source={{ uri: product.image }}
             />
 
             <Content>
-                <Title>Rustic Metal Fish</Title>
+                <Title>{product.name}</Title>
 
                 <PriceContent>
                     <Currency>$</Currency>
-                    <Price>289.00</Price>
+                    <Price>{product.price}</Price>
                 </PriceContent>
 
                 <QuantityContent>
@@ -50,7 +56,7 @@ export function ProductCart() {
                         />
                     </QuantityButton>
 
-                    <Quantity>1</Quantity>
+                    <Quantity>{product.quantity}</Quantity>
 
                     <QuantityButton>
                         <Feather

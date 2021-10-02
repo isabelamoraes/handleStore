@@ -61,10 +61,10 @@ export function Cart({ navigation }) {
                     showsVerticalScrollIndicator={false}
                     data={cart}
                     keyExtractor={item => item.id.toString()}
-                    contentContainerStyle={{ paddingHorizontal: 30 }}
+                    contentContainerStyle={{ paddingHorizontal: 30, paddingBottom: 30 }}
                     ItemSeparatorComponent={() => <ListDivider />}
                     renderItem={({ item }) =>
-                        <ProductCart />
+                        <ProductCart product={item} />
                     }
                 />
             </Content>

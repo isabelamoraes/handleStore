@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import { TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 
 export const Container = styled.View`
@@ -19,7 +19,11 @@ export const Image = styled.Image`
     border-radius: 10px;
 `;
 
-export const Title = styled.Text`
+export const Title = styled(Text).attrs({
+    numberOfLines: 1,
+    lineBreakMode: 'clip'
+})`
+    width: 120px;
     font-family: ${({ theme }) => theme.fonts.regular};
     color: ${({ theme }) => theme.colors.primary};
     font-size: ${RFValue(14)}px;
