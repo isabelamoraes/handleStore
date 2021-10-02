@@ -17,14 +17,22 @@ export interface ProductProps {
 }
 
 interface Props {
-    product: ProductProps
+    product: ProductProps;
+    onPressIn: () => void;
+    onPressOut: (item: ProductProps) => void;
 }
 
 export function Product({
-    product
+    product,
+    onPressIn,
+    onPressOut
 }: Props){
+
     return(
-        <Container>
+        <Container 
+            onPressIn={onPressIn}
+            onPressOut={() => onPressOut(product)}
+        >
             <Image 
                 source={{ uri: product.image }}
             />

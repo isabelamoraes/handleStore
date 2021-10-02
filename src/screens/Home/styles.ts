@@ -1,6 +1,7 @@
 import styled from 'styled-components/native';
 import { TouchableOpacity } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { MotiImage } from '@motify/components';
 
 export const Container = styled.View`
     flex: 1;
@@ -41,3 +42,8 @@ export const Subtitle = styled.Text`
 export const Cart = styled(TouchableOpacity).attrs({
     activeOpacity: 0.6
 })``;
+
+export const Image = styled(MotiImage)`
+    width: 30px;
+    height: 30px;
+`;

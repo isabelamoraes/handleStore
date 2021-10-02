@@ -3,6 +3,7 @@ import { Feather } from '@expo/vector-icons';
 import { useTheme } from 'styled-components';
 import { FlatList, View } from 'react-native';
 
+import { useAuth } from '../../hooks/auth';
 import { ProductCart } from '../../components/ProductCart';
 
 import {
@@ -27,6 +28,7 @@ import {
 
 export function Cart({ navigation }) {
     const theme = useTheme();
+    const { cart } = useAuth();
 
     return (
         <Container>
@@ -57,8 +59,8 @@ export function Cart({ navigation }) {
             <Content>
                 <FlatList
                     showsVerticalScrollIndicator={false}
-                    data={[1, 2, 3, 4, 5]}
-                    keyExtractor={item => item.toString()}
+                    data={cart}
+                    keyExtractor={item => item.id.toString()}
                     contentContainerStyle={{ paddingHorizontal: 30 }}
                     ItemSeparatorComponent={() => <ListDivider />}
                     renderItem={({ item }) =>

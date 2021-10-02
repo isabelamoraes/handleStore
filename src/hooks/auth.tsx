@@ -8,14 +8,12 @@ import React, {
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-interface Cart {
-    product_id: number;
-    quantity: number;
-}
+import { ProductCartProps } from '../components/ProductCart';
+import { ProductProps } from '../components/Product';
 
 type AuthContextData = {
-    cart: Cart[];
-    addToCart: (cart: Cart) => Promise<void>;
+    cart: ProductCartProps[];
+    addToCart: (cart: ProductProps) => Promise<void>;
     removeToCart: (id: number) => Promise<void>;
 }
 
@@ -26,16 +24,36 @@ type AuthProviderProps = {
 export const AuthContext = createContext({} as AuthContextData);
 
 function AuthProvider({ children }: AuthProviderProps) {
-    const [cart, setCart] = useState<Cart[]>([]);
+    const [cart, setCart] = useState<ProductCartProps[]>([]);
 
     const dataKey = `@handleStore:cart`;
 
-    async function addToCart(productCart) {
+    async function addToCart(newProduct: ProductProps) {
         try {
-            const newCart = [...cart, productCart];
+            const updateCart = [...cart];
 
-            setCart(newCart);
-            await AsyncStorage.setItem(dataKey, JSON.stringify(newCart));
+            const productExist = updateCart.find(product => product.id === newProduct.id);
+
+            const currentQuantity = productExist ? productExist.quantity : 0;
+            const quantity = currentQuantity + 1;
+
+            if (productExist) {
+                productExist.quantity = quantity;
+            } else {
+
+                const product = {
+                    id: newProduct.id,
+                    name: newProduct.name,
+                    image: newProduct.image,
+                    price: newProduct.price,
+                    quantity: 1
+                }
+
+                updateCart.push(product);
+            }
+
+            setCart(updateCart);
+            await AsyncStorage.setItem(dataKey, JSON.stringify(updateCart));
 
         } catch (error) {
             throw new Error(error);
@@ -45,7 +63,7 @@ function AuthProvider({ children }: AuthProviderProps) {
     async function removeToCart(id: number) {
         try {
             setCart(oldState => oldState.filter(
-                cart => cart.product_id !== id
+                cart => cart.id !== id
             ));
 
             await AsyncStorage.setItem(dataKey, JSON.stringify(cart));
@@ -59,7 +77,7 @@ function AuthProvider({ children }: AuthProviderProps) {
         const dataStoraged = await AsyncStorage.getItem(dataKey);
 
         if (dataStoraged) {
-            const cartStorage = JSON.parse(dataStoraged) as Cart[];
+            const cartStorage = JSON.parse(dataStoraged) as ProductCartProps[];
             setCart(cartStorage);
         }
     }

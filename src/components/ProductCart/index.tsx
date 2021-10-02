@@ -16,6 +16,14 @@ import {
     Delete
 } from './styles';
 
+export interface ProductCartProps {
+    id: number;
+    name: string;
+    price: number;
+    image: string;
+    quantity: number;
+}
+
 export function ProductCart() {
     const theme = useTheme();
 
