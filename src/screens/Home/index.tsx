@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Feather } from '@expo/vector-icons';
-import { useTheme } from 'styled-components';
 import { FlatList } from 'react-native';
 import LottieView from 'lottie-react-native';
 import { useAnimationState } from 'moti';
@@ -20,12 +18,12 @@ import {
     TitleStore,
     Subtitle,
     Cart,
-    Image
+    Image,
+    Quantity
 } from './styles';
 
 export function Home({ navigation }) {
-    const theme = useTheme();
-    const { addToCart } = useAuth();
+    const { cart, addToCart } = useAuth();
 
     const [data, setData] = useState<ProductProps[]>([]);
     const [loading, setLoading] = useState(true);
@@ -34,23 +32,37 @@ export function Home({ navigation }) {
         navigation.navigate('Cart');
     }
 
+    const quantityCart =
+        cart.reduce((sumTotal, product) => {
+            sumTotal += product.quantity;
+            return sumTotal
+        }, 0)
+
     const toogleAnimationState = useAnimationState({
-        in: {
+        inImage: {
             width: 40,
             height: 40,
+            marginTop: -8,
         },
-        out: {
+        outImage: {
             width: 30,
             height: 30,
+            marginTop: -8,
+        },
+        inText: {
+            fontSize: 14,
+        },
+        outText: {
+            fontSize: 12,
         }
     });
 
     function handlePressIn() {
-        toogleAnimationState.transitionTo('in');
+        toogleAnimationState.transitionTo('inImage');
     }
 
     function handlePressOut(product: ProductProps) {
-        toogleAnimationState.transitionTo('out');
+        toogleAnimationState.transitionTo('outImage');
         addToCart(product);
     }
 
@@ -75,6 +87,11 @@ export function Home({ navigation }) {
                 <Cart
                     onPress={handleCart}
                 >
+                    <Quantity
+                        state={toogleAnimationState}
+                    >
+                        {quantityCart}
+                    </Quantity>
                     <Image
                         source={cartPNG}
                         state={toogleAnimationState}
@@ -104,9 +121,9 @@ export function Home({ navigation }) {
                             justifyContent: 'space-between',
                         }}
                         renderItem={({ item }) =>
-                            <Product 
-                                product={item} 
-                                onPressIn={handlePressIn}
+                            <Product
+                                product={item}
+                                onPress={handlePressIn}
                                 onPressOut={() => handlePressOut(item)}
                             />
                         }

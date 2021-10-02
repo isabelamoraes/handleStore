@@ -2,6 +2,7 @@ import React from 'react';
 
 import {
     Container,
+    Content,
     Image,
     Title,
     PriceContent,
@@ -18,31 +19,34 @@ export interface ProductProps {
 
 interface Props {
     product: ProductProps;
-    onPressIn: () => void;
+    onPress: () => void;
     onPressOut: (item: ProductProps) => void;
 }
 
 export function Product({
     product,
-    onPressIn,
+    onPress,
     onPressOut
-}: Props){
+}: Props) {
 
-    return(
-        <Container 
-            onPressIn={onPressIn}
+    return (
+        <Container
+            onPress={onPress}
             onPressOut={() => onPressOut(product)}
         >
-            <Image 
+
+            <Image
                 source={{ uri: product.image }}
             />
 
-            <Title>{product.name}</Title>
-            
-            <PriceContent>
-                <Currency>$</Currency>
-                <Price>{product.price}</Price>
-            </PriceContent>
+            <Content>
+                <Title>{product.name}</Title>
+
+                <PriceContent>
+                    <Currency>$</Currency>
+                    <Price>{product.price}</Price>
+                </PriceContent>
+            </Content>
         </Container>
     );
 }

@@ -28,7 +28,23 @@ import {
 
 export function Cart({ navigation }) {
     const theme = useTheme();
-    const { cart } = useAuth();
+    const { cart, removeToCart } = useAuth();
+
+    function handleRemoveProduct(id: number){
+        removeToCart(id);
+    }
+
+    const quantityCart =
+        cart.reduce((sumTotal, product) => {
+            sumTotal += product.quantity;
+            return sumTotal
+        }, 0);
+
+    const subTotal =
+        cart.reduce((sumTotal, product) => {
+            sumTotal += product.quantity * product.price;
+            return sumTotal
+        }, 0);
 
     return (
         <Container>
@@ -49,7 +65,7 @@ export function Cart({ navigation }) {
                     </Title>
 
                     <Subtitle>
-                        3 items
+                        {quantityCart} items
                     </Subtitle>
                 </Info>
 
@@ -64,7 +80,10 @@ export function Cart({ navigation }) {
                     contentContainerStyle={{ paddingHorizontal: 30, paddingBottom: 30 }}
                     ItemSeparatorComponent={() => <ListDivider />}
                     renderItem={({ item }) =>
-                        <ProductCart product={item} />
+                        <ProductCart 
+                            product={item} 
+                            removeProduct={() => handleRemoveProduct(item.id)}
+                        />
                     }
                 />
             </Content>
@@ -75,7 +94,7 @@ export function Cart({ navigation }) {
 
                     <PriceCotent>
                         <Currency>$</Currency>
-                        <Price>733.00</Price>
+                        <Price>{subTotal.toFixed(2)}</Price>
                     </PriceCotent>
                 </Wrapper>
 
@@ -95,7 +114,7 @@ export function Cart({ navigation }) {
 
                     <PriceCotent>
                         <CurrencyTotal>$</CurrencyTotal>
-                        <PriceTotal>740.00</PriceTotal>
+                        <PriceTotal>{(subTotal + 7).toFixed(2)}</PriceTotal>
                     </PriceCotent>
                 </Wrapper>
             </Footer>

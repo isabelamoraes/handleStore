@@ -7,6 +7,13 @@ export const Container = styled(Pressable).attrs({
 })`
     width: 47%;
     margin-bottom: 30px;
+
+    background: ${({ theme }) => theme.colors.background};
+    border-radius: 10px;
+`;
+
+export const Content = styled.View`
+    padding: 10px;
 `;
 
 export const Image = styled.Image`

@@ -26,10 +26,12 @@ export interface ProductCartProps {
 
 interface CartProps {
     product: ProductCartProps;
+    removeProduct: (id: number) => void;
 }
 
 export function ProductCart({
-    product
+    product,
+    removeProduct
 }: CartProps) {
     const theme = useTheme();
 
@@ -48,7 +50,9 @@ export function ProductCart({
                 </PriceContent>
 
                 <QuantityContent>
-                    <QuantityButton>
+                    <QuantityButton
+                        disabled={product.quantity == 1 ? true : false}
+                    >
                         <Feather
                             name="minus"
                             size={14}
@@ -68,7 +72,9 @@ export function ProductCart({
                 </QuantityContent>
             </Content>
 
-            <Delete>
+            <Delete
+                onPress={() => removeProduct(product.id)}
+            >
                 <Feather
                     name="trash-2"
                     size={24}

@@ -1,14 +1,14 @@
 import styled from 'styled-components/native';
 import { TouchableOpacity } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { MotiImage } from '@motify/components';
+import { MotiImage, MotiText } from '@motify/components';
 
 export const Container = styled.View`
     flex: 1;
     padding: 30px;
     padding-bottom: 0px;
 
-    background: ${({ theme }) => theme.colors.background};
+    background: ${({ theme }) => theme.colors.backgroundList};
 `;
 
 export const Header = styled.View`
@@ -46,4 +46,12 @@ export const Cart = styled(TouchableOpacity).attrs({
 export const Image = styled(MotiImage)`
     width: 30px;
     height: 30px;
+`;
+
+export const Quantity = styled(MotiText)`
+    font-family: ${({ theme }) => theme.fonts.bold};
+    color: ${({ theme }) => theme.colors.secondary};
+    font-size: ${RFValue(12)}px;
+
+    text-align: right;
 `;
