@@ -26,8 +26,6 @@ export const Title = styled.Text`
     font-family: ${({ theme }) => theme.fonts.regular};
     color: ${({ theme }) => theme.colors.primary};
     font-size: ${RFValue(16)}px;
-
-    margin-top: 18px;
     margin-bottom: 6px;
 `;
 

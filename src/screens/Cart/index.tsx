@@ -50,6 +50,8 @@ export function Cart({ navigation }) {
             return sumTotal
         }, 0);
 
+    const shipping = quantityCart > 0 ? 7 : 0;
+
     return (
         <Container>
             <Header>
@@ -108,7 +110,7 @@ export function Cart({ navigation }) {
 
                     <PriceCotent>
                         <Currency>$</Currency>
-                        <Price>7.00</Price>
+                        <Price>{shipping.toFixed(2)}</Price>
                     </PriceCotent>
                 </Wrapper>
 
@@ -119,7 +121,7 @@ export function Cart({ navigation }) {
 
                     <PriceCotent>
                         <CurrencyTotal>$</CurrencyTotal>
-                        <PriceTotal>{(subTotal + 7).toFixed(2)}</PriceTotal>
+                        <PriceTotal>{(subTotal + shipping).toFixed(2)}</PriceTotal>
                     </PriceCotent>
                 </Wrapper>
             </Footer>

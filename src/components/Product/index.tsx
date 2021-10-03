@@ -19,8 +19,8 @@ export interface ProductProps {
 
 interface Props {
     product: ProductProps;
-    onPress: () => void;
-    onPressOut: (item: ProductProps) => void;
+    onPress: (item: ProductProps) => void;
+    onPressOut: () => void;
 }
 
 export function Product({
@@ -31,8 +31,8 @@ export function Product({
 
     return (
         <Container
-            onPress={onPress}
-            onPressOut={() => onPressOut(product)}
+            onPress={() => onPress(product)}
+            onPressOut={onPressOut}
         >
 
             <Image

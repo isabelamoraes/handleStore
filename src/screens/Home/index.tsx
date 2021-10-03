@@ -57,13 +57,13 @@ export function Home({ navigation }) {
         }
     });
 
-    function handlePressIn() {
+    function handlePressIn(product: ProductProps) {
         toogleAnimationState.transitionTo('inImage');
+        addToCart(product);
     }
 
-    function handlePressOut(product: ProductProps) {
+    function handlePressOut() {
         toogleAnimationState.transitionTo('outImage');
-        addToCart(product);
     }
 
     async function loadData() {

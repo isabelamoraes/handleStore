@@ -63,12 +63,16 @@ function AuthProvider({ children }: AuthProviderProps) {
 
     async function removeToCart(id: number) {
         try {
-            setCart(oldState => oldState.filter(
-                cart => cart.id !== id
-            ));
-
-            await AsyncStorage.setItem(dataKey, JSON.stringify(cart));
-
+            if(cart.length == 1){
+                setCart([]);
+                AsyncStorage.removeItem(dataKey);
+            }else{
+                setCart(oldState => oldState.filter(
+                    cart => cart.id !== id
+                ));
+    
+                await AsyncStorage.setItem(dataKey, JSON.stringify(cart));
+            }
         } catch (error) {
             throw new Error(error);
         }
