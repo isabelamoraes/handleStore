@@ -124,7 +124,7 @@ export function Home({ navigation }) {
                             <Product
                                 product={item}
                                 onPress={handlePressIn}
-                                onPressOut={() => handlePressOut(item)}
+                                onPressOut={handlePressOut}
                             />
                         }
                     />

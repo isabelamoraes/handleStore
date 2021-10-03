@@ -27,11 +27,13 @@ export interface ProductCartProps {
 interface CartProps {
     product: ProductCartProps;
     removeProduct: (id: number) => void;
+    updateProduct: (id: number, quantity: number) => void;
 }
 
 export function ProductCart({
     product,
-    removeProduct
+    removeProduct,
+    updateProduct
 }: CartProps) {
     const theme = useTheme();
 
@@ -51,7 +53,7 @@ export function ProductCart({
 
                 <QuantityContent>
                     <QuantityButton
-                        disabled={product.quantity == 1 ? true : false}
+                        onPress={() => updateProduct(product.id, product.quantity-1)}
                     >
                         <Feather
                             name="minus"
@@ -62,7 +64,9 @@ export function ProductCart({
 
                     <Quantity>{product.quantity}</Quantity>
 
-                    <QuantityButton>
+                    <QuantityButton
+                        onPress={() => updateProduct(product.id, product.quantity+1)}
+                    >
                         <Feather
                             name="plus"
                             size={14}

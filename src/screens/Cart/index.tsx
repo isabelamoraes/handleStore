@@ -28,10 +28,14 @@ import {
 
 export function Cart({ navigation }) {
     const theme = useTheme();
-    const { cart, removeToCart } = useAuth();
+    const { cart, removeToCart, updateToCart } = useAuth();
 
     function handleRemoveProduct(id: number){
         removeToCart(id);
+    }
+
+    function handleUpdateCart(id: number, quantity: number){
+        quantity == 0 ? removeToCart(id) : updateToCart(id, quantity);
     }
 
     const quantityCart =
@@ -82,7 +86,8 @@ export function Cart({ navigation }) {
                     renderItem={({ item }) =>
                         <ProductCart 
                             product={item} 
-                            removeProduct={() => handleRemoveProduct(item.id)}
+                            removeProduct={handleRemoveProduct}
+                            updateProduct={handleUpdateCart}
                         />
                     }
                 />

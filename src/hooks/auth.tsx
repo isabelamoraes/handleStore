@@ -15,6 +15,7 @@ type AuthContextData = {
     cart: ProductCartProps[];
     addToCart: (cart: ProductProps) => Promise<void>;
     removeToCart: (id: number) => Promise<void>;
+    updateToCart: (id: number, quantity: number) => Promise<void>;
 }
 
 type AuthProviderProps = {
@@ -73,12 +74,36 @@ function AuthProvider({ children }: AuthProviderProps) {
         }
     }
 
-    async function loadStorageData() {
-        const dataStoraged = await AsyncStorage.getItem(dataKey);
+    async function updateToCart(id: number, quantity: number) {
+        try {
+            const updateCart = [...cart];
 
-        if (dataStoraged) {
-            const cartStorage = JSON.parse(dataStoraged) as ProductCartProps[];
-            setCart(cartStorage);
+            const productExist = updateCart.find(product => product.id === id);
+
+            if (productExist) {
+                productExist.quantity = quantity;
+
+                setCart(updateCart);
+                await AsyncStorage.setItem(dataKey, JSON.stringify(updateCart));
+            } else {
+                throw Error();
+            }
+
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
+
+    async function loadStorageData() {
+        try {
+            const dataStoraged = await AsyncStorage.getItem(dataKey);
+
+            if (dataStoraged) {
+                const cartStorage = JSON.parse(dataStoraged) as ProductCartProps[];
+                setCart(cartStorage);
+            }
+        } catch (error) {
+            throw new Error(error);
         }
     }
 
@@ -90,7 +115,8 @@ function AuthProvider({ children }: AuthProviderProps) {
         <AuthContext.Provider value={{
             cart,
             addToCart,
-            removeToCart
+            removeToCart,
+            updateToCart
         }}>
             {children}
         </AuthContext.Provider>
