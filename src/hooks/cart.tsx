@@ -3,7 +3,8 @@ import React, {
     useContext,
     useState,
     ReactNode,
-    useEffect
+    useEffect,
+    useCallback
 } from 'react';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -11,20 +12,20 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ProductCartProps } from '../components/ProductCart';
 import { ProductProps } from '../components/Product';
 
-type AuthContextData = {
+type CartContextData = {
     cart: ProductCartProps[];
     addToCart: (cart: ProductProps) => Promise<void>;
     removeToCart: (id: number) => Promise<void>;
     updateToCart: (id: number, quantity: number) => Promise<void>;
 }
 
-type AuthProviderProps = {
+type CartProviderProps = {
     children: ReactNode
 }
 
-export const AuthContext = createContext({} as AuthContextData);
+export const CartContext = createContext({} as CartContextData);
 
-function AuthProvider({ children }: AuthProviderProps) {
+function CartProvider({ children }: CartProviderProps) {
     const [cart, setCart] = useState<ProductCartProps[]>([]);
 
     const dataKey = `@handleStore:cart`;
@@ -54,7 +55,6 @@ function AuthProvider({ children }: AuthProviderProps) {
             }
 
             setCart(updateCart);
-            await AsyncStorage.setItem(dataKey, JSON.stringify(updateCart));
 
         } catch (error) {
             throw new Error(error);
@@ -63,15 +63,13 @@ function AuthProvider({ children }: AuthProviderProps) {
 
     async function removeToCart(id: number) {
         try {
-            if(cart.length == 1){
+            if (cart.length == 1) {
                 setCart([]);
                 AsyncStorage.removeItem(dataKey);
-            }else{
+            } else {
                 setCart(oldState => oldState.filter(
                     cart => cart.id !== id
                 ));
-    
-                await AsyncStorage.setItem(dataKey, JSON.stringify(cart));
             }
         } catch (error) {
             throw new Error(error);
@@ -88,7 +86,6 @@ function AuthProvider({ children }: AuthProviderProps) {
                 productExist.quantity = quantity;
 
                 setCart(updateCart);
-                await AsyncStorage.setItem(dataKey, JSON.stringify(updateCart));
             } else {
                 throw Error();
             }
@@ -111,29 +108,37 @@ function AuthProvider({ children }: AuthProviderProps) {
         }
     }
 
+    async function updateStorageData() {
+        await AsyncStorage.setItem(dataKey, JSON.stringify(cart));
+    }
+
     useEffect(() => {
         loadStorageData();
-    }, [])
+    }, []);
+
+    useEffect(useCallback(() => {
+        updateStorageData();
+    }, [cart]));
 
     return (
-        <AuthContext.Provider value={{
+        <CartContext.Provider value={{
             cart,
             addToCart,
             removeToCart,
             updateToCart
         }}>
             {children}
-        </AuthContext.Provider>
+        </CartContext.Provider>
     )
 }
 
-function useAuth() {
-    const context = useContext(AuthContext);
+function useCart() {
+    const context = useContext(CartContext);
 
     return context;
 }
 
 export {
-    AuthProvider,
-    useAuth
+    CartProvider,
+    useCart
 }

@@ -3,7 +3,7 @@ import { Feather } from '@expo/vector-icons';
 import { useTheme } from 'styled-components';
 import { FlatList, View } from 'react-native';
 
-import { useAuth } from '../../hooks/auth';
+import { useCart } from '../../hooks/cart';
 import { ProductCart } from '../../components/ProductCart';
 
 import {
@@ -28,7 +28,7 @@ import {
 
 export function Cart({ navigation }) {
     const theme = useTheme();
-    const { cart, removeToCart, updateToCart } = useAuth();
+    const { cart, removeToCart, updateToCart } = useCart();
 
     function handleRemoveProduct(id: number){
         removeToCart(id);

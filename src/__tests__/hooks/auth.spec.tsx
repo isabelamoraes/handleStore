@@ -1,7 +1,7 @@
 import { renderHook, act } from '@testing-library/react-hooks';
-import { AuthProvider, useAuth } from '../../hooks/auth';
+import { CartProvider, useCart } from '../../hooks/cart';
 
-describe('Auth Hook', () => {
+describe('Cart Hook', () => {
     it('should be able to add a product to cart', async () => {
         const product = {
             id: 1,
@@ -13,8 +13,8 @@ describe('Auth Hook', () => {
 
         const cart = [product];
 
-        const { result } = renderHook(() => useAuth(), {
-            wrapper: AuthProvider
+        const { result } = renderHook(() => useCart(), {
+            wrapper: CartProvider
         });
 
         await act(() => result.current.addToCart(product));
@@ -25,15 +25,22 @@ describe('Auth Hook', () => {
     it('should be able to remove a product to cart', async () => {
         const productId = 1;
 
-        const updatedCart = [];
+        const product = {
+            id: 1,
+            name: "Rustic Metal Fish",
+            price: 289.00,
+            image: "http://lorempixel.com/640/480/food",
+            quantity: 1
+        }
 
-        const { result } = renderHook(() => useAuth(), {
-            wrapper: AuthProvider
+        const { result } = renderHook(() => useCart(), {
+            wrapper: CartProvider
         });
 
+        await act(() => result.current.addToCart(product));
         await act(() => result.current.removeToCart(productId));
 
-        expect(result.current.cart).toEqual(updatedCart);
+        expect(result.current.cart).toEqual([]);
     });
 
     it('should be able to update a product quantity to cart', async () => {
@@ -48,8 +55,8 @@ describe('Auth Hook', () => {
             quantity: 1
         };
 
-        const { result } = renderHook(() => useAuth(), {
-            wrapper: AuthProvider
+        const { result } = renderHook(() => useCart(), {
+            wrapper: CartProvider
         });
 
         await act(() => result.current.addToCart(product));

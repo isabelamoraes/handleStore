@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList } from 'react-native';
+import { Alert, FlatList } from 'react-native';
 import LottieView from 'lottie-react-native';
 import { useAnimationState } from 'moti';
 
 import api from '../../services/api';
-import { useAuth } from '../../hooks/auth';
+import { useCart } from '../../hooks/cart';
 import { Product, ProductProps } from '../../components/Product';
 
 import loadAnimation from '../../assets/load.json';
@@ -23,7 +23,7 @@ import {
 } from './styles';
 
 export function Home({ navigation }) {
-    const { cart, addToCart } = useAuth();
+    const { cart, addToCart } = useCart();
 
     const [data, setData] = useState<ProductProps[]>([]);
     const [loading, setLoading] = useState(true);
@@ -67,10 +67,15 @@ export function Home({ navigation }) {
     }
 
     async function loadData() {
-        const response = await api.get('product');
+        try {
+            const response = await api.get('product');
 
-        setData(response.data);
-        setLoading(false);
+            setData(response.data);
+        } catch {
+            Alert.alert("Oops!", "Unable to load products from the store. Try again later.")
+        } finally {
+            setLoading(false);
+        }
     }
 
     useEffect(() => {
